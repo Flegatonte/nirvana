@@ -1,13 +1,35 @@
 package com.nirvana.app.models;
 
+import com.nirvana.app.utils.NutritionalFactsCalculator;
+import javax.persistence.*;
 import java.util.List;
 
-public class Recipe {
+@Entity
+@Table(name = "recipes")
+public class Recipe implements NutritionalCalculable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private List<FoodItem> ingredients;  // Ingredienti della ricetta
-    private NutritionalFacts totalNutritionalFacts;  // Nutrienti totali della ricetta
-    private int servings;  // Numero di porzioni
+
+    @OneToMany
+    private List<FoodItem> ingredients;
+
+    @Transient
+    private NutritionalFacts totalNutritionalFacts;
+
+    @Override
+    public NutritionalFacts getNutritionalFacts() {
+        if (totalNutritionalFacts == null) {
+            totalNutritionalFacts = NutritionalFactsCalculator.aggregateNutritionalFacts(this);
+        }
+        return totalNutritionalFacts;
+    }
+
+    public List<FoodItem> getIngredients() {
+        return ingredients;
+    }
+
+    // getter e setter
 }
-
-

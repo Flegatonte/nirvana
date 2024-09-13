@@ -1,25 +1,51 @@
 package com.nirvana.app.models;
 
+import com.nirvana.app.utils.NutritionalFactsCalculator;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MealPlan {
+@Entity
+@Table(name = "meal_plans")
+public class MealPlan implements NutritionalCalculable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private User user;  // L'utente a cui è associato il piano alimentare
-    private LocalDate date;  // Data del piano alimentare
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private User user;  // user associated with the plan
+    private LocalDate date;
 
-    // Obiettivo giornaliero associato
-    private NutritionalGoals dailyNutritionalGoals;
+    // daily goal associated
+    @OneToMany
+    @JoinColumn(name = "nutritional_goal_id")
+    private NutritionalGoal dailyNutritionalGoals;
 
-    // Lista dei pasti della giornata
+    // list of meals consumed during the day
+    @OneToMany(mappedBy = "mealPlan") // 'mealPlan' refers to the field in Meal
     private List<Meal> meals;
 
-    // Totali nutrizionali per il giorno
-    private NutritionalFacts totalNutritionalFacts;
+    @OneToMany(mappedBy = "mealPlan")
+    private List<NutritionalAdjustment> nutritionalAdjustments;
 
-    // Stato del piano (es. "completo", "modificato dall'utente", "in esecuzione")
+    @Transient
+    // nutritional facts of the day
+    private NutritionalFacts totalNutritionalFacts;
+    @Override
+    public NutritionalFacts getNutritionalFacts() {
+        if (totalNutritionalFacts == null) {
+            totalNutritionalFacts = NutritionalFactsCalculator.aggregateNutritionalFacts(this);
+        }
+        return totalNutritionalFacts;
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    // status of the plan (completed, modified, in use)
     private String status;
 
-    // Metodi getter e setter
 }
 

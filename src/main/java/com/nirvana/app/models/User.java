@@ -1,40 +1,51 @@
 package com.nirvana.app.models;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;
-    private String password;  // Assicurati di gestire la crittografia in modo sicuro
+    private String password;  // ensure password encryption is handled securely
 
-    // Dati personali
-    private String gender;  // Genere (es. "M", "F", "Altro")
-    private LocalDate dateOfBirth;  // Data di nascita
-    private double height;  // Altezza (in cm o m)
-    private double weight;  // Peso (in kg)
+    // personal details
+    private String gender;  // gender (e.g., "M", "F", "Other")
+    private LocalDate dateOfBirth;  // date of birth
+    private double height;  // height (in cm or m)
+    private double weight;  // weight (in kg)
 
-    // Obiettivi nutrizionali e fitness
-    private NutritionalGoals nutritionalGoals;  // Oggetto che contiene gli obiettivi nutrizionali personalizzati
-//    private FitnessGoals fitnessGoals;  // Obiettivi relativi all'attività fisica
+    // nutritional and fitness goals
+    @OneToMany(mappedBy = "user")
+    private NutritionalGoal nutritionalGoal;  // object containing personalized nutritional goals
+//    private FitnessGoals fitnessGoals;  // fitness-related goals
 /*
-    // Preferenze alimentari
-    private List<String> dietaryPreferences;  // Es. vegetariano, vegano, senza glutine
-    private List<String> allergies;  // Eventuali allergie (es. frutta a guscio, lattosio)
-    private List<String> dislikedFoods;  // Cibi non graditi
+    // dietary preferences
+    private List<String> dietaryPreferences;  // e.g., vegetarian, vegan, gluten-free
+    private List<String> allergies;  // potential allergies (e.g., nuts, lactose)
+    private List<String> dislikedFoods;  // disliked foods
 
-    // Stato di salute e condizioni mediche
-    private List<String> medicalConditions;  // Es. diabete, ipertensione
-    private double dailyCaloricNeeds;  // Fabbisogno calorico giornaliero calcolato o impostato dall'utente */
+    // health conditions and medical information
+    private List<String> medicalConditions;  // e.g., diabetes, hypertension
+    private double dailyCaloricNeeds;  // daily caloric needs, calculated or user-defined */
 
-    // Preferenze per la gestione dello sgarro
-    private boolean autoAdjustMeals;  // Se attivo, modifica automaticamente i pasti in base agli sgarri
+    // preferences for handling cheats
+    private boolean autoAdjustMeals;  // if enabled, automatically adjust meals based on cheats
 
-    // Storico e progressi
-    private List<MealPlan> mealHistory;  // Storico dei piani alimentari giornalieri
-//    private List<Workout> workoutHistory;  // Storico degli allenamenti
-    private List<WeightEntry> weightHistory;  // Storico del peso nel tempo
+    // history and progress tracking
+    @OneToMany(mappedBy = "user")
+    private List<MealPlan> mealHistory;  // history of daily meal plans
+    //    private List<Workout> workoutHistory;  // history of workouts
+    @OneToMany(mappedBy = "user")
+    private List<WeightEntry> weightHistory;  // history of weight entries
 
-    // Metodi getter e setter
+    // weight unit preference
+    private WeightUnit weightUnit;  // unit of measurement for weight (e.g., "kg" or "lbs")
+
+    // getter and setter methods
 }

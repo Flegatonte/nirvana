@@ -1,15 +1,55 @@
 package com.nirvana.app.models;
 
-import java.util.List;
+import com.nirvana.app.utils.NutritionalFactsCalculator;
 
-public class Meal {
+import java.util.List;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "meals")
+public class Meal implements NutritionalCalculable {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         private String type;
-        private List<FoodItem> foodItems;  // Singoli alimenti
-        private List<Recipe> recipes;  // Ricette consumate durante il pasto
-        private NutritionalFacts totalNutritionalFacts;
+        @ManyToMany
+        @JoinTable(
+                name = "meal_food_items",   // name of the join table
+                joinColumns = @JoinColumn(name = "meal_id"),  // foreign key column for meal
+                inverseJoinColumns = @JoinColumn(name = "food_item_id")  // foreign key column for food
+        )
+        private List<FoodItem> foodItems;  // single elements included
+        @ManyToMany
+        @JoinTable(
+                name = "meal_recipes",  // Name of the join table
+                joinColumns = @JoinColumn(name = "meal_id"),  // Foreign key column for Meal
+                inverseJoinColumns = @JoinColumn(name = "recipe_id")  // Foreign key column for Recipe
+        )
+        private List<Recipe> recipes;  // recipes included in the meal
+        @Transient
 
-        // Metodi getter e setter
+        private NutritionalFacts totalNutritionalFacts; // calculated summing up all the element in the meal
+
+        // relationship with MealPlan
+        @ManyToOne
+        @JoinColumn(name = "meal_plan_id")
+        private MealPlan mealPlan;
+
+        @Override
+        public NutritionalFacts getNutritionalFacts() {
+                if (totalNutritionalFacts == null) {
+                        totalNutritionalFacts = NutritionalFactsCalculator.aggregateNutritionalFacts(this);
+                }
+                return totalNutritionalFacts;
+        }
+
+        public List<FoodItem> getFoodItems() {
+                return foodItems;
+        }
+
+        public List<Recipe> getRecipes() {
+                return recipes;
+        }
     }
 
 

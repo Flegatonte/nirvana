@@ -3,7 +3,7 @@ package com.nirvana.app.models;
 import com.nirvana.app.utils.NutritionalFactsCalculator;
 
 import java.util.List;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "meals")

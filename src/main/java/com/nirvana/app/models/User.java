@@ -1,6 +1,6 @@
 package com.nirvana.app.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class User {
 
     // nutritional and fitness goals
     @OneToMany(mappedBy = "user")
-    private NutritionalGoal nutritionalGoal;  // object containing personalized nutritional goals
+    private List<NutritionalGoal> nutritionalGoals;  // object containing personalized nutritional goals
 //    private FitnessGoals fitnessGoals;  // fitness-related goals
 /*
     // dietary preferences

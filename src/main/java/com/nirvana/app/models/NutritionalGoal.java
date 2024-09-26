@@ -1,21 +1,27 @@
 package com.nirvana.app.models;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "nutritional_facts")
 public class NutritionalGoal {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private double calories;  // daily caloric goal (kcal)
 
-    // macronutrient goals
+    private double calories;  // daily caloric goal (kcal)
     private double protein;   // protein goal (g)
     private double carbohydrates;  // carbohydrate goal (g)
     private double sugars;    // sugar goal (g)
@@ -27,51 +33,71 @@ public class NutritionalGoal {
     private double sodium;    // sodium goal (mg)
     private double potassium; // potassium goal (mg)
 
-    // micronutrient goals
     private double calcium;   // calcium goal (mg)
     private double iron;      // iron goal (mg)
     private double vitaminA;  // vitamin A goal (µg)
     private double vitaminC;  // vitamin C goal (mg)
     private double vitaminD;  // vitamin D goal (µg)
 
-    // additional nutrients (for custom user-defined goals)
-    private Map<String, Double> additionalNutrients;  // key: nutrient name, value: goal amount (in g, mg, µg)
+    // additional nutrients stored as JSON
+    @Column(columnDefinition = "json")
+    private String additionalNutrientsJson;
+
+    @OneToMany(mappedBy = "dailyNutritionalGoal")
+    private List<MealPlan> mealPlans;
 
     // constructor for a default healthy individual
     public NutritionalGoal() {
-        this.calories = 2000;  // default to 2000 kcal/day
-        this.protein = 50;  // default 50g protein
-        this.carbohydrates = 275;  // default 275g carbohydrates
-        this.sugars = 30;  // default 30g sugar
-        this.fats = 70;  // default 70g total fat
-        this.saturatedFat = 20;  // default 20g saturated fat
-        this.transFat = 0;  // avoid trans fat
-        this.fiber = 30;  // default 30g fiber
-        this.cholesterol = 300;  // default 300mg cholesterol
-        this.sodium = 2300;  // default 2300mg sodium
-        this.potassium = 3500;  // default 3500mg potassium
+        this.calories = 2000;
+        this.protein = 50;
+        this.carbohydrates = 275;
+        this.sugars = 30;
+        this.fats = 70;
+        this.saturatedFat = 20;
+        this.transFat = 0;
+        this.fiber = 30;
+        this.cholesterol = 300;
+        this.sodium = 2300;
+        this.potassium = 3500;
 
-        // standard micronutrient goals
-        this.calcium = 1000;  // in mg
-        this.iron = 18;  // in mg
-        this.vitaminA = 900;  // in µg
-        this.vitaminC = 90;  // in mg
-        this.vitaminD = 20;  // in µg
+        this.calcium = 1000;
+        this.iron = 18;
+        this.vitaminA = 900;
+        this.vitaminC = 90;
+        this.vitaminD = 20;
 
-        // initialize the map for additional nutrients
-        this.additionalNutrients = new HashMap<>();
+        // Initialize an empty map and store it as JSON
+        Map<String, Double> additionalNutrients = new HashMap<>();
+        setAdditionalNutrients(additionalNutrients);
     }
 
-    // methods to modify or extend goals
-    public void setCustomMacronutrientGoal(double protein, double carbs, double fats) {
-        this.protein = protein;
-        this.carbohydrates = carbs;
-        this.fats = fats;
-    }
-
+    // Method to add additional nutrients
     public void addAdditionalNutrient(String nutrient, double amount) {
-        this.additionalNutrients.put(nutrient, amount);
+        Map<String, Double> additionalNutrients = getAdditionalNutrients();
+        additionalNutrients.put(nutrient, amount);
+        setAdditionalNutrients(additionalNutrients);
     }
 
-    // getter and setter methods
+    // Getters and setters for additional nutrients using JSON
+    public Map<String, Double> getAdditionalNutrients() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(additionalNutrientsJson, HashMap.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+    }
+
+    public void setAdditionalNutrients(Map<String, Double> additionalNutrients) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            this.additionalNutrientsJson = objectMapper.writeValueAsString(additionalNutrients);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Other getters and setters
+    // ...
 }

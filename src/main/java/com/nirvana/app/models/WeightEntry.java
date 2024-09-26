@@ -1,6 +1,6 @@
 package com.nirvana.app.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -15,6 +15,9 @@ public class WeightEntry {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;  // reference to the user associated with this weight entry
+
+    public WeightEntry() {
+    }
 
     // constructor
     public WeightEntry(LocalDate date, double weight, User user) {

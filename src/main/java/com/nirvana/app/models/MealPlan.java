@@ -2,7 +2,7 @@ package com.nirvana.app.models;
 
 import com.nirvana.app.utils.NutritionalFactsCalculator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,15 +12,15 @@ public class MealPlan implements NutritionalCalculable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;  // user associated with the plan
     private LocalDate date;
 
     // daily goal associated
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "nutritional_goal_id")
-    private NutritionalGoal dailyNutritionalGoals;
+    private NutritionalGoal dailyNutritionalGoal;
 
     // list of meals consumed during the day
     @OneToMany(mappedBy = "mealPlan") // 'mealPlan' refers to the field in Meal

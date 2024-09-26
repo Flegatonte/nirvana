@@ -1,6 +1,6 @@
 package com.nirvana.app.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "nutritional_adjustments")

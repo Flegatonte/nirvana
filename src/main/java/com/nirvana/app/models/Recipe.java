@@ -1,7 +1,7 @@
 package com.nirvana.app.models;
 
 import com.nirvana.app.utils.NutritionalFactsCalculator;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity

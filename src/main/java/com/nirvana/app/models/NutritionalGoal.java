@@ -78,7 +78,7 @@ public class NutritionalGoal {
         setAdditionalNutrients(additionalNutrients);
     }
 
-    // Getters and setters for additional nutrients using JSON
+    // getters and setters for additional nutrients using JSON
     public Map<String, Double> getAdditionalNutrients() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

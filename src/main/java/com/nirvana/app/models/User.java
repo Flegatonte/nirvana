@@ -48,4 +48,108 @@ public class User {
     private WeightUnit weightUnit;  // unit of measurement for weight (e.g., "kg" or "lbs")
 
     // getter and setter methods
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public List<NutritionalGoal> getNutritionalGoals() {
+        return nutritionalGoals;
+    }
+
+    public void setNutritionalGoals(List<NutritionalGoal> nutritionalGoals) {
+        this.nutritionalGoals = nutritionalGoals;
+    }
+
+    public boolean isAutoAdjustMeals() {
+        return autoAdjustMeals;
+    }
+
+    public void setAutoAdjustMeals(boolean autoAdjustMeals) {
+        this.autoAdjustMeals = autoAdjustMeals;
+    }
+
+    public List<MealPlan> getMealHistory() {
+        return mealHistory;
+    }
+
+    public void setMealHistory(List<MealPlan> mealHistory) {
+        this.mealHistory = mealHistory;
+    }
+
+    public List<WeightEntry> getWeightHistory() {
+        return weightHistory;
+    }
+
+    public void setWeightHistory(List<WeightEntry> weightHistory) {
+        this.weightHistory = weightHistory;
+    }
+
+    public WeightUnit getWeightUnit() {
+        return weightUnit;
+    }
+
+    public void setWeightUnit(WeightUnit weightUnit) {
+        this.weightUnit = weightUnit;
+    }
 }
